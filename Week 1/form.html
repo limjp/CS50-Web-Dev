@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <title>Forms</title>
+    </head>
+    <body>
+        <form>
+            <div>
+                <input type="text" placeholder="Full Name" name="full_name">
+                <input type="password" placeholder="Password">
+            </div>
+
+            <div>
+                Favourite Colour?
+                <input name="colour" type="radio" value="red"> Red
+                <input name="colour" type="radio" value="green"> Green
+                <input name="colour" type="radio" value="Blue"> Blue
+                <input name="colour" type="radio" value="Orange"> Orange
+                <input name="colour" type="radio" value="Other"> Other
+            </div>
+
+            <div>
+                <input name="country" list="countries" placeholder="Country">
+                <datalist id="countries">
+                    <option value = "Afghanistasn">
+                    <option value = "Singapore">
+                    <option value = "United States">
+                    <option value = "United Kingdom">    
+                </datalist>
+            </div>
+            
+            <div>
+                <input type="submit">
+            </div>
+        </form>
+    </body>
+</html>
