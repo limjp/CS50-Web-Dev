@@ -1,0 +1,92 @@
+body {
+    /* 100vh mneans the height takes up 100% of the viewport  */
+    height: 100vh; 
+    font-family: Arial, sans-serif;
+}
+
+.header, .header-links {
+    display: flex;
+    align-items: center;
+}
+
+.header a, .header-links a {
+    color: black;
+    padding: 10px;
+    text-decoration: none;
+}
+
+.header-links {
+    margin-left: auto;
+}
+
+input {
+    font-size: 16px;
+    width: 300px;
+    padding: 13px 0;
+    /* Parent selector = & */
+  }
+
+input[type=text] {
+    /* Give input text a lighter color */
+    color: #464646;
+    margin: 0 0 0 5px;
+}
+
+input[type=submit] {
+    font-size: 14px;
+    width: 185px;
+    /* Remove border */
+    border-width: 0px;
+    border-radius: 15px;
+    margin: 20px;
+  }
+  
+input[type=submit]:hover {
+    /* Add box-shadow when hovering button (border adds space) */
+    box-shadow: 0px 0px 2px rgba(0, 0, 0, 0.8);
+}
+  
+input.blue-button {
+    background-color: dodgerblue;
+    color: white;
+    font-size: smaller;
+    max-width: 200px;
+    border-radius: 0px;
+    border: 1px solid #156bbd;
+    float: right;
+    padding: 10px 2px;
+    margin: 0;
+}
+
+.search-container { 
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    /* set flex-direction cause that is the direction you want items to be laid out in*/
+    /* align-items only work when height (below) is defined because otherwise don't know how much size the search-container supposed to take.*/
+    align-items: center;
+    /* % when used in height in css means take up that % of parent height. Here, search container parent is body so it means take up 90% of body height*/
+    height: 90%;
+}
+
+.search-container .search-field {
+    display: flex;
+    flex-direction: row;
+    border-radius: 25px;
+    border: 1px solid #afafaf;
+    align-items: center;
+    margin: 10px;
+    padding-left: 15px;
+}
+
+.search-container .search-field input {
+    border: none;
+    border-radius: 25px;
+}
+
+.search-container .logo-subtext {
+    color: #4285f4;
+    position: relative;
+    left: 110px;
+    top: -18px;
+  }
