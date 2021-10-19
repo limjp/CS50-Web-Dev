@@ -4,15 +4,28 @@ body {
     font-family: Arial, sans-serif;
 }
 
-.header, .header-links {
+.header, .header-links, .header-advanced-logo, .header-advanced {
     display: flex;
     align-items: center;
 }
 
-.header a, .header-links a {
+.header a, .header-links a, .header-advanced-logo, .header-advanced a {
     color: black;
     padding: 10px;
     text-decoration: none;
+}
+
+.header-advanced {
+    background-color: white;
+    height: 50px;
+}
+
+.header-advanced-logo {
+    padding: 10px;
+}
+
+.header-advanced-logo img {
+    height: 30px;
 }
 
 .header-links {
@@ -89,4 +102,50 @@ input.blue-button {
     position: relative;
     left: 110px;
     top: -18px;
-  }
+}
+
+.advanced-search-container {
+    margin: 50px 40px;
+}
+
+.advanced-search-container label {
+    display: inline-block;
+    width: 16%;
+    font-size: 20px;
+}
+
+.advanced-search-container .whitespace {
+    display: inline-block;
+    width: 50%;
+}
+
+.advanced-search-container .form-group {
+    display: flex;
+    align-items: center;
+    margin-top: 10px;
+    padding: 10px 0;
+}
+
+.advanced-search-container .form-group label {
+    width: 16%;
+    font-size: 14px;
+}
+
+.advanced-search-container .form-group input[type=text] {
+    width: 49%;
+    padding: 2px 0;
+}
+
+.advanced-search-container .form-group .clarification {
+    font-size: 11px;
+    width: 30%;
+    margin-left: 1%;
+}
+
+.advanced-search-container .form-group .clarification .monospace {
+    font-family: monospace;
+}
+
+.advanced-search-container .form-group .right-align {
+    width: 50%;
+}
