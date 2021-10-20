@@ -39,6 +39,7 @@ input {
     /* Parent selector = & */
   }
 
+/*There is inheritnace going on between input and input=text. This means all inputs have a width of 500px unless otherwise stated*/
 input[type=text] {
     /* Give input text a lighter color */
     color: #464646;
@@ -104,6 +105,7 @@ input.blue-button {
     top: -18px;
 }
 
+/* How come without a height and width defined here, will the properties below it use %*/
 .advanced-search-container {
     margin: 50px 40px;
 }
@@ -119,6 +121,7 @@ input.blue-button {
     width: 50%;
 }
 
+/*align-items center here makes sure that the words are at the center of the input field*/
 .advanced-search-container .form-group {
     display: flex;
     align-items: center;
