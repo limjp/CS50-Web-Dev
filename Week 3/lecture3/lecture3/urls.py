@@ -26,5 +26,6 @@ urlpatterns = [
     #the first argument means if we hit the route hello, then call the path referenced in the 2nd argument
     #the include argument means call ALL the urls found in hello.urls 
     path('hello/', include("hello.urls")),
-    path('newyear/', include("newyear.urls"))
+    path('newyear/', include("newyear.urls")),
+    path('tasks/', include("tasks.urls"))
 ]
