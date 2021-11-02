@@ -1,5 +1,6 @@
 from django.db import models
 from django.db.models.deletion import CASCADE
+from django.db.models.fields import related
 
 # Create your models here.
 class Airport(models.Model):
@@ -24,3 +25,17 @@ class Flight(models.Model):
 
     def __str__(self):
         return f"{self.id}, {self.origin}, {self.destination}"
+
+#Passenger has a ManyToMany field with Flights. This is because many passengers can be on many flights. OR put another way, 1 passenger can be on many flights and 
+#1 flight can have many passengers.
+#blank=true means that a passenger can have no flights too
+#related_name="passsengers" means that from the flights model, we can access all the passengers on the flights by doing flights.passengers
+#Note: That in SQL if we were to have this many to many r/s we would have to represent it as an association table and then have SQL commands necessary to manipulate that 
+#association table as well as set up the linking between the 2 tables that the assoc table joins. In Django ORM, all of this is abstracted away.
+class Pasesenger(models.Model):
+    first = models.CharField(max_length=64)
+    last = models.CharField(max_length=64)
+    flights = models.ManyToManyField(Flight, blank=True, related_name="passengers")
+
+    def __str__(self):
+        return f"{self.first} {self.last}"
