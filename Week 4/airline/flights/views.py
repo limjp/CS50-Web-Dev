@@ -17,7 +17,8 @@ def flight(request, flight_id):
     flight = Flight.objects.get(id=flight_id)
     return render(request, "flights/flight.html", {
         "flight": flight,
-        "passengers": flight.passengers.all()
+        "passengers": flight.passengers.all(),
+        "non_passengers": Pasesenger.objects.exclude(flights=flight).all()
     })
 
 def book(request, flight_id):
@@ -30,4 +31,5 @@ def book(request, flight_id):
         passenger.flights.add(flight)
         #use reverse cause we don't need to hardcode URL easier to just reverse by their name and if we eventually need to change URL we can just change in urls.py 
         #and not worry about changing every HttpResponseRedirect
-        return HttpResponseRedirect(reverse("flight", args=(flight.id)))
+        #redirect args can take either a list or a tuple. If you choose tuple and you only have 1 argument you must have trailing comma
+        return HttpResponseRedirect(reverse("flight", args=(flight.id,)))
