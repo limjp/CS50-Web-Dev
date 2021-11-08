@@ -1,4 +1,5 @@
 from django.contrib.auth import authenticate, login, logout
+from django.contrib import messages
 from django.db import IntegrityError
 from django.http import HttpResponse, HttpResponseRedirect
 from django.shortcuts import render
@@ -74,7 +75,7 @@ def create_listing(request):
         if form.is_valid():
             user = User.objects.get(id=request.user.id)
             new_listing = Listing(
-                title = form.cleaned_data["title"], 
+                title = form.cleaned_data["title"],
                 description = form.cleaned_data["description"],
                 image = form.cleaned_data["image"], 
                 category = form.cleaned_data["category"],
@@ -83,6 +84,10 @@ def create_listing(request):
             )
             new_listing.save()
             return HttpResponseRedirect(reverse("index"))
+        else:
+            return render(request, "auctions/make_listing.html", {
+                "form": form
+            })
     return render(request, "auctions/make_listing.html", {
         "listingForm": ListingForm()
     })
