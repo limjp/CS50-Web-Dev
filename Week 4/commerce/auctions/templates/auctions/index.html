@@ -5,7 +5,9 @@
 
         {% for listing in listings %}
         <div class="index_container">
-            <div class="index_title"> {{listing.title}} </div>
+            <div class="index_title">
+                <a href="{% url 'listing' listing.id %}">{{listing.title}}</a> 
+            </div>
             <div class="index_description"> {{listing.description}} </div>
             <div class="index_img"> <img src={{listing.image}} alt="image of listing"> </div>
         </div>

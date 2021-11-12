@@ -1,0 +1,48 @@
+{% extends "auctions/layout.html" %}
+{% load crispy_forms_tags %}
+
+{% block body %}
+<div>
+    <div class="listing_container">
+        <div>{{listing.title}}</div>
+        <img src={{listing.image}} alt={{listing.title}}>
+        <div>{{listing.description}}</div>
+        <div>{{listing.current_price}}</div>
+    </div>
+
+    {% if form.errors %}
+        {% for field in form %}
+            {% for error in field.errors %}
+            <div class="alert alert-danger">
+                <strong>{{ error | escape }}</strong>
+            </div>
+            {% endfor %}
+        {% endfor %}
+    {% else %}
+
+        {% if is_user_logged_in %}    
+            <form action="{% url 'listing' listing.id%}" method="POST">
+                {% csrf_token %}
+                {{ bid_form|crispy }}
+                <button type="submit" name="submit_bid" class="btn btn-success">Bid</button>
+                <button type="submit" name="add_watchlist" class="btn btn-primary">Watch</button>
+                {% if is_creator %}
+                <button type="submit" name="close_auction" class="btn btn-danger">Close</button>
+                {% endif %}
+            </form>
+
+            <form action="{% url 'create_comment' listing.id%}" method="POST">
+                {% csrf_token %}
+                {{ comment_form|crispy }}
+                <button type="submit" name="submit_comment" class="btn btn-primary">Comment</button>
+            </form>
+            <div class="comment_container">
+                {% for comment in comments %}
+                <div> {{ comment }}</div>
+                {% endfor %}
+            </div>
+        {% endif %}
+    
+    {% endif %}
+</div>
+{% endblock %}

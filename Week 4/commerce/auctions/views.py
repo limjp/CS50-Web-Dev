@@ -6,8 +6,8 @@ from django.shortcuts import render
 from django.urls import reverse
 from django.contrib.auth.decorators import login_required
 
-from .models import User, Listing
-from .forms import ListingForm
+from .models import User, Listing, Bid, Comment
+from .forms import ListingForm, BidForm, CommentForm
 
 
 def index(request):
@@ -91,3 +91,44 @@ def create_listing(request):
     return render(request, "auctions/make_listing.html", {
         "listingForm": ListingForm()
     })
+
+def listing(request, listing_id):
+    if request.method == "POST":
+        form = BidForm(request.POST)
+        if "submit_bid" in request.POST and form.is_valid():
+            listing = Listing.objects.get(id=listing_id)
+            new_bid = Bid(
+                price = form.cleaned_data["price"],
+                auction = listing,
+                bidder = request.user)
+            new_bid.save()
+            return HttpResponseRedirect(reverse("index"))
+        elif "add_watchlist" in request.POST:
+            listing = Listing.objects.get(listing_id)
+            watchlist_item = Listing.objects.create(watchers=request.user.id)
+            listing.watchers.add(watchlist_item)
+            return HttpResponseRedirect(reverse("index"))
+        elif "close_auction" in request.POST:
+            listing = Listing.objects.get(listing_id)
+            listing.is_active = False
+            listing.save()
+        elif not(form.is_valid()):
+            return render(request, "auctions/listing.html", {
+                "form": form
+            })
+    listing = Listing.objects.get(id=listing_id)
+    all_comments = listing.comments.all()
+    is_user_logged_in = request.user.is_authenticated
+    is_creator = request.user == listing.creator
+    return render(request, "auctions/listing.html", {
+        "bid_form": BidForm(),
+        "user_id": request.user.id,
+        "comments": all_comments,
+        "listing": listing,
+        "is_user_logged_in": is_user_logged_in,
+        "is_creator": is_creator,
+        "comment_form": CommentForm()
+    })
+
+def create_comment(request, listing_id):
+    pass
