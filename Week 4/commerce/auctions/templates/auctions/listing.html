@@ -2,12 +2,19 @@
 {% load crispy_forms_tags %}
 
 {% block body %}
+
+{% for msg in messages %}
+<div class="alert alert-primary" role="alert">
+    <a href="#" class="alert-link">{{ msg }}</a>
+</div>
+{% endfor %}
+
 <div>
     <div class="listing_container">
         <div>{{listing.title}}</div>
         <img src={{listing.image}} alt={{listing.title}}>
         <div>{{listing.description}}</div>
-        <div>{{listing.current_price}}</div>
+        <div>{{current_price}}</div>
     </div>
 
     {% if form.errors %}
@@ -17,7 +24,7 @@
                 <strong>{{ error | escape }}</strong>
             </div>
             {% endfor %}
-        {% endfor %}
+        {% endfor %}    
     {% else %}
 
         {% if is_user_logged_in %}    
