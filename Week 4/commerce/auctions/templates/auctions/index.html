@@ -2,16 +2,17 @@
 
 {% block body %}
     <h2>Active Listings</h2>
-
+        <div class="card-deck">
         {% for listing in listings %}
             {% if listing.is_active == True %}
-                <div class="index_container">
-                    <div class="index_title">
-                        <a href="{% url 'listing' listing.id %}">{{listing.title}}</a> 
+                <div class="card border-primary mb-3" style="max-width: 18rem;">
+                    <img class="card-img-top" src={{listing.image}} alt="image of item">
+                    <div class="card-body">
+                        <a class="card-link" href="{% url 'listing' listing.id %}">{{listing.title}}</a>
+                        <p class="card-text"> {{listing.description}}</p>
                     </div>
-                    <div class="index_description"> {{listing.description}} </div>
-                    <div class="index_img"> <img src={{listing.image}} alt="image of listing"> </div>
                 </div>
             {% endif %}
         {% endfor %}
+        </div>
 {% endblock %}

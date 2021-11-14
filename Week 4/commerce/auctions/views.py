@@ -6,7 +6,7 @@ from django.shortcuts import render
 from django.urls import reverse
 from django.contrib.auth.decorators import login_required
 
-from .models import User, Listing, Bid, Comment
+from .models import User, Listing, Bid, Comment, Category
 from .forms import ListingForm, BidForm, CommentForm
 
 
@@ -194,3 +194,15 @@ def create_comment(request, listing_id):
                 "comment_form": CommentForm(),
                 "current_price": current_price
             })
+
+def categories(request):
+    all_categories = Category.objects.all()
+    return render(request, "auctions/categories.html", {
+        "all_categories": all_categories
+    })
+
+def category(request, category_id):
+    same_cat_listings = Listing.objects.filter(category__id=category_id).filter(is_active=True)
+    return render(request, "auctions/category.html", {
+        "same_cat_listings": same_cat_listings
+    })
