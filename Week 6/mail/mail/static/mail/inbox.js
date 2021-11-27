@@ -15,6 +15,7 @@ function compose_email() {
 
   // Show compose view and hide other views
   document.querySelector('#emails-view').style.display = 'none';
+  document.querySelector('#email-view').style.display = 'none';
   document.querySelector('#compose-view').style.display = 'block';
 
   // Clear out composition fields
@@ -27,6 +28,7 @@ function load_mailbox(mailbox) {
   
   // Show the mailbox and hide other views
   document.querySelector('#emails-view').style.display = 'block';
+  document.querySelector('#email-view').style.display = 'none';
   document.querySelector('#compose-view').style.display = 'none';
 
   // Show the mailbox name
@@ -42,11 +44,15 @@ function load_mailbox(mailbox) {
     emails.forEach(email => {
       const rowContainer = document.createElement("div")
       email.read === true ? rowContainer.setAttribute("class", "row read border border-secondary") : rowContainer.setAttribute("class", "row unread border border-secondary")
+      rowContainer.dataset.emailId = email.id
+      rowContainer.dataset.read = email.read
+      rowContainer.setAttribute("id", email.id)
       container.appendChild(rowContainer)
 
       addColToRow(email.sender, rowContainer)
       addColToRow(email.subject, rowContainer)
       addColToRow(email.timestamp, rowContainer)
+      document.querySelector(`#${email.id}`).addEventListener("click", view_email(rowContainer.dataset.emailId))
     })
   })
 }
@@ -67,11 +73,7 @@ function send_email(){
   .then((response) => response.json())
   .then(result => {
     if (result.error) {
-      const element = document.createElement('div')
-      element.innerHTML = result.error
-      element.setAttribute("role", "alert")
-      element.setAttribute("class", "alert alert-danger")
-      document.querySelector("#alert-container").append(element)
+      create_error_alert(result.error)
     } else load_mailbox("sent")
   })
   return false
@@ -82,4 +84,51 @@ function addColToRow(content, row) {
   col.innerHTML = content
   col.setAttribute("class", "col-sm")
   row.appendChild(col)
+}
+
+function create_error_alert(alert_msg) {
+  const element = document.createElement('div')
+  element.innerHTML = alert_msg
+  element.setAttribute("role", "alert")
+  element.setAttribute("class", "alert alert-danger")
+  document.querySelector("#alert-container").append(element)
+}
+
+function view_email(email_id) {
+  fetch(`/emails/${email_id}`)
+  .then(response => response.json())
+  .then(response => {
+    if (result.error) {
+      create_error_alert(response.error)
+    } else {
+      const subject = response.subject
+      const sender = response.sender
+      const body = response.body
+      const timestamp = response.timestamp
+      const containerToAppend = document.querySelector("#email-view")
+
+      createDiv("email-subject", subject, containerToAppend)
+      createDiv("email-sender", sender, containerToAppend)
+      createDiv("email-body", body, containerToAppend)
+      createDiv("email-timestamp", timestamp, containerToAppend)
+
+      fetch(`/emails/${email_id}`, {
+        method: 'PUT',
+        body: JSON.stringify({
+            read: true
+        })
+      })
+      
+      document.querySelector('#emails-view').style.display = 'none';
+      document.querySelector('#compose-view').style.display = 'none';
+      document.querySelector('#email-view').style.display = 'block';
+    }
+  })
+}
+
+function createDiv(divName, divContent, containerToAppend) {
+  const element = document.createElement('div')
+  element.innerHTML = divContent
+  element.setAttribute("id", divName)
+  containerToAppend.appendChild(element)
 }
