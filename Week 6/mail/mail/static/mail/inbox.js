@@ -34,6 +34,10 @@ function load_mailbox(mailbox) {
   // Show the mailbox name
   document.querySelector('#emails-view').innerHTML = `<h3>${mailbox.charAt(0).toUpperCase() + mailbox.slice(1)}</h3>`;
 
+  //Clear out any emails that exists
+  const email_container = document.querySelector(".email-container")
+  if (email_container) email_container.remove()
+
   fetch(`/emails/${mailbox}`)
   .then(response => response.json())
   .then(emails => {
@@ -52,7 +56,9 @@ function load_mailbox(mailbox) {
       addColToRow(email.sender, rowContainer)
       addColToRow(email.subject, rowContainer)
       addColToRow(email.timestamp, rowContainer)
-      document.querySelector(`#${email.id}`).addEventListener("click", view_email(rowContainer.dataset.emailId))
+
+      rowContainer.addEventListener("click", () => view_email(rowContainer.dataset.emailId))
+      rowContainer.style.cursor = "pointer"
     })
   })
 }
@@ -98,19 +104,31 @@ function view_email(email_id) {
   fetch(`/emails/${email_id}`)
   .then(response => response.json())
   .then(response => {
-    if (result.error) {
+    if (response.error) {
       create_error_alert(response.error)
     } else {
       const subject = response.subject
       const sender = response.sender
       const body = response.body
       const timestamp = response.timestamp
-      const containerToAppend = document.querySelector("#email-view")
+      const containerToAppend = document.createElement("div")
+      containerToAppend.dataset.archive = response.archive
+      containerToAppend.dataset.archive = response.id
+      containerToAppend.setAttribute("class", "email-container")
 
       createDiv("email-subject", subject, containerToAppend)
       createDiv("email-sender", sender, containerToAppend)
       createDiv("email-body", body, containerToAppend)
       createDiv("email-timestamp", timestamp, containerToAppend)
+
+      const buttonContent = response.archive ? "Unarchived" : "Archived"
+      const archive_button = createButton("btn btn-dark", buttonContent, containerToAppend)
+      archive_button.addEventListener("click", () => archiveEmail(email_id))
+
+      const replyButton = createButton("btn btn-primary", "Reply", containerToAppend)
+      replyButton.addEventListener("click", () => reply(sender, subject, timestamp, body))
+
+      document.querySelector("#email-view").appendChild(containerToAppend)
 
       fetch(`/emails/${email_id}`, {
         method: 'PUT',
@@ -129,6 +147,45 @@ function view_email(email_id) {
 function createDiv(divName, divContent, containerToAppend) {
   const element = document.createElement('div')
   element.innerHTML = divContent
-  element.setAttribute("id", divName)
+  element.setAttribute("class", divName)
   containerToAppend.appendChild(element)
+}
+
+function archiveEmail(email_id, isArchived) {
+  const responseToSend = isArchived ? false : true
+
+  fetch(`/emails/${email_id}`, {
+    method: 'PUT',
+    body: JSON.stringify({
+        archived: responseToSend
+    })
+  })
+
+  load_mailbox('inbox')
+}
+
+function createButton(buttonName, buttonContent, containerToAppend) {
+  const button = document.createElement("button")
+  button.innerHTML = buttonContent
+  button.setAttribute("type", "button")
+  button.setAttribute("class", buttonName)
+  containerToAppend.append(button)
+
+  return button
+}
+
+function reply(sender, subject, timestamp, body) {
+  // Show compose view and hide other views
+  document.querySelector('#emails-view').style.display = 'none'
+  document.querySelector('#email-view').style.display = 'none'
+  document.querySelector('#compose-view').style.display = 'block'
+
+  document.querySelector('#compose-recipients').value = sender
+
+  if (subject.slice(0,2) === "Re") {
+    document.querySelector('#compose-subject').value = subject
+  } else document.querySelector('#compose-subject').value = `Re: ${subject}`
+
+  document.querySelector('#compose-body').value = `On ${timestamp} ${sender} wrote: 
+  ${body}`
 }
