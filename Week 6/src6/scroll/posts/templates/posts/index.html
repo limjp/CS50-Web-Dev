@@ -40,6 +40,8 @@
                 counter = end + 1;
 
                 // Get new posts and add posts
+                // Note that fetch takes the URL of that specific endpoint
+                // Rmb to use response.json() to convert that response into JSON cause fetch returns a Promise that resolves to a response
                 fetch(`/posts?start=${start}&end=${end}`)
                 .then(response => response.json())
                 .then(data => {

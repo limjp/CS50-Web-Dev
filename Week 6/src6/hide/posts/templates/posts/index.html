@@ -66,11 +66,19 @@
             };
 
             // If hide button is clicked, delete the post
+            // With most event listeners the function that the event takes in can take 1 argument which is the event itself whihc is a JSON object which
+            // contains information about that click
             document.addEventListener('click', event => {
+                //event.target is basically information about the event itself i.e. what was clicked on. We are assigning that target to the const element
+                // If that element was a button containing className
+                //Note was written it means that anytime you click on something on the page this JS would run that is why you need to identify what was being clicked on
                 const element = event.target;
                 if (element.className === 'hide') {
+                    //Below means that when you press hide button, then set animationPlayState into motion first making it completely transparent and THEN you remove it
+                    //This is why element.parentElement.remove() is within an event listener called animationend
                     element.parentElement.style.animationPlayState = 'running';
                     element.parentElement.addEventListener('animationend', () =>  {
+                        //We have to use parentElement cause element here refers to the hide button which is in a div that surronds both content and the button 
                         element.parentElement.remove();
                     });
                 }
@@ -95,7 +103,9 @@
             // Add a new post with given contents to DOM
             function add_post(contents) {
 
-                // Create new post
+                // Create new post by creating a div, then setting the className of that post as well as the innerHTML of that post 
+                // We have to dynamically create the hide button as we don't know how many posts are being created. Hence, we are dynamically creating the Hide button
+                // For each POST. Note here there is a div that contains BOTH the button and the content of the post
                 const post = document.createElement('div');
                 post.className = 'post';
                 post.innerHTML = `${contents} <button class="hide">Hide</button>`;

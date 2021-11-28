@@ -13,3 +13,16 @@ textarea {
 .unread{
     background-color: white;
 }
+
+.email-subject{
+    border-style: double;
+    margin-top: 20px;
+    margin-bottom: 20px;
+    padding-left: 10px;
+}
+
+.email-body{
+    margin-top: 20px;
+    margin-bottom: 20px;
+    min-height: 400px
+}

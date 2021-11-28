@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <script src="https://unpkg.com/react@17/umd/react.production.min.js" crossorigin></script>
+        <script src="https://unpkg.com/react-dom@17/umd/react-dom.production.min.js" crossorigin></script>
+        <script src="https://unpkg.com/babel-standalone@6/babel.min.js"></script>
+        <title>Counter</title>
+    </head>
+    <body>
+        <div id="app"></div>
+
+        <script type="text/babel">
+            //State means any data we want to store in components
+            function App() {
+                //React.useState(0) is a State Hook. A hook is a special function that allows you to Hook onto React features. useState is a Hook that allows user to add React state to 
+                //function componenets. Basically a hook is how you add state to a component. 
+                //useState declares a state varaible - in our case it is count. A state varaible is a way to presrever values between function calls. 
+                //useState only has 1 argument which is its initial state. Here it is 0
+                //useState returns a pair of values. First, the current state and second a function that updates the state. The function takes 1 argument which is the new value of count
+                const [count, setCount] = React.useState(0);
+
+                function updateCount() {
+                    setCount(count + 1);
+                }
+                
+                return (
+                    <div>
+                        <div>{count}</div>
+                        <button onClick={updateCount}>Count</button>
+                    </div>
+                )
+            }
+
+            //ReactDom simply tries to render that Div with ReactDom.render takes 2 arguments, first is name of component and second is where in the DOM should it be rendered
+            ReactDOM.render(<App />, document.querySelector('#app'));
+        </script>
+    </body>
+</html>

@@ -3,7 +3,9 @@
     <head>
         <title>Animation</title>
         <style>
-
+            /* @keyframes basically give you ability to set what CSS should apply to that animation at the start and end of it 
+            There are different keywords to be used in keyframe. They can be from and to OR 0% 50% 100%.
+            Can also specify font-size besides pixel to % as well. */
             @keyframes grow {
                 from {
                     font-size: 20px;
@@ -14,6 +16,9 @@
             }
 
             h1 {
+                /* grow is just a specific animation name. CSS has in built animations
+                   animation-duration is self explanatory
+                   animation-fill-mode just means what direction should the animation move */
                 animation-name: grow;
                 animation-duration: 2s;
                 animation-fill-mode: forwards;

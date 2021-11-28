@@ -121,7 +121,7 @@ function view_email(email_id) {
       createDiv("email-body", body, containerToAppend)
       createDiv("email-timestamp", timestamp, containerToAppend)
 
-      const buttonContent = response.archive ? "Unarchived" : "Archived"
+      const buttonContent = response.archived ? "Unarchive" : "Archive"
       const archive_button = createButton("btn btn-dark", buttonContent, containerToAppend)
       archive_button.addEventListener("click", () => archiveEmail(email_id))
 
@@ -186,6 +186,6 @@ function reply(sender, subject, timestamp, body) {
     document.querySelector('#compose-subject').value = subject
   } else document.querySelector('#compose-subject').value = `Re: ${subject}`
 
-  document.querySelector('#compose-body').value = `On ${timestamp} ${sender} wrote: 
+  document.querySelector('#compose-body').value = `On ${timestamp} ${sender} wrote:
   ${body}`
 }
