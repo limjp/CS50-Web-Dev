@@ -9,9 +9,11 @@ def file_uri(filename):
     return pathlib.Path(os.path.abspath(filename)).as_uri()
 
 
-driver = webdriver.Chrome()
+driver = webdriver.Chrome(executable_path="C:\\Users\\Limjp\\Desktop\\Utilities\\chromedriver.exe")
 
 
+#Selenium needs to create a class called WebpageTests(unittest.TestCase) before you can create testing scenarios
+#Methods below are just scenarios to test
 class WebpageTests(unittest.TestCase):
 
     def test_title(self):

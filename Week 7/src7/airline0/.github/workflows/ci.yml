@@ -1,7 +1,11 @@
+# This file is where you can save what actions to take
+#name just means the name of the job. on means on what action should the actio take place. Jobs means what tasks should run. 
 name: Testing
 on: push
 
 jobs:
+#Test_project is the name of the job. It has 2 arguments. First, runs on which specifies what machine would run on. Github has its on VM which is most ubuntu. 
+#The steps are the step by steps that occur for this job. In our case, we use a fuinction called actions/checkout@v2 which is written by Github 
   test_project:
     runs-on: ubuntu-latest
     steps:

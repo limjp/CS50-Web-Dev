@@ -1,5 +1,9 @@
+#Version is what version of Docker Compose you are running 
 version: '3'
 
+#Services should describe the various serivce you want to be part of your web app. Each service is wihtin its own container that is creatd from their own image
+#Here, we have 2 services. db and web. They are based on separate images. For the db we just create a container based on prewritte image called postgres. 
+#For web . in build means in this directory. Ports 8000:8000 means you want port 8000 in docer to correspond with port 80000 on local machine. 
 services:
     db:
         image: postgres
