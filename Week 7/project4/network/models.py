@@ -5,9 +5,9 @@ from django.db.models.deletion import CASCADE
 
 class User(AbstractUser):
     following = models.ManyToManyField("self", through="Following", symmetrical=False)
-    date_created = models.DateField(auto_now_add=True)
+    date_created = models.DateTimeField(auto_now_add=True)
 
-    def follow(self, user):
+    def follow_user(self, user):
         Following.objects.create(
             follower_id = self,
             followered_id = user
@@ -62,12 +62,12 @@ class User(AbstractUser):
         )
 
     def __str__(self) -> str:
-        return f"{self.id}, {self.username}"
+        return f"{self.username}"
 
 class Following(models.Model):
     follower_id = models.ForeignKey(User, related_name="followers", on_delete=CASCADE)
     followered_id = models.ForeignKey(User, related_name="follow", on_delete=CASCADE)
-    date_created = models.DateField(auto_now_add=True)
+    date_created = models.DateTimeField(auto_now_add=True)
 
     def __str__(self) -> str:
         return f"Follower: {self.follower_id}, Following: {self.followered_id}"
@@ -75,7 +75,7 @@ class Following(models.Model):
 class Post(models.Model):
     author = models.ForeignKey(User, related_name="posts", on_delete=CASCADE)
     content = models.TextField()
-    date_created = models.DateField(auto_now_add=True)
+    date_created = models.DateTimeField(auto_now_add=True)
     likes = models.ManyToManyField(User, through="Like", blank=True, null=True, related_name="posts_liked")
 
     def __str__(self) -> str:
@@ -84,7 +84,7 @@ class Post(models.Model):
 class Like(models.Model):
     user_id = models.ForeignKey(User, on_delete=CASCADE)
     post_id = models.ForeignKey(Post, on_delete=CASCADE)
-    date_liked = models.DateField(auto_now_add=True)
+    date_liked = models.DateTimeField(auto_now_add=True)
 
     def __str__(self) -> str:
         return f"{self.user_id}, {self.post_id}"

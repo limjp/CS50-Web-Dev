@@ -1,0 +1,51 @@
+{% extends "network/layout.html" %}
+{% load crispy_forms_tags %}
+
+{% block body %}
+
+<div class="container">
+
+    <div class="row">
+        <div class="col-md-4">
+            Followers: {{ follower_count }}
+        </div>
+
+        <div class="col-md-4">
+            Following: {{ follow_count }}
+        </div>
+    </div>
+    
+    <div class="user_post_container">
+        {% for post in posts %}
+        <div class="card">
+            <div class="card-body">
+                {{ post.content }}
+            </div>
+            {% if post.date_created %}
+                <div class="card-text">
+                    {{ post.date_created }}
+                </div>
+            {% endif %}
+            <div class="card-link">
+                {{ post.author }}
+            </div>
+            {% if post.like %}
+                <div class="card-text">
+                    {{ post.likes }}
+                </div>
+            {% endif %}
+        </div>
+        {% endfor%}
+        {% include "network/pagination.html" with page=posts %}
+    </div>
+
+    {% if not_same_user %}
+        {% if currently_follow %}
+            <button type="button" class="btn btn-primary">Unfollow</button>
+        {% else %}
+            <button type="button" class="btn btn-primary">Follow</button>
+        {% endif %}
+    {% endif %}
+</div>
+
+{% endblock %}
