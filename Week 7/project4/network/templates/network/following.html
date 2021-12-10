@@ -1,0 +1,32 @@
+{% extends "network/layout.html" %}
+{% load crispy_forms_tags %}
+
+{% block body %}
+
+<div class="container">
+    
+    <div class="user_post_container">
+        {% for post in posts %}
+        <div class="card">
+            <div class="card-body">
+                {{ post.content }}
+            </div>
+            <div class="card-text">
+                {{ post.date_created }}
+            </div>
+            <div class="card-link">
+                <a class="nav-link" href="{% url 'profile' post.author.id %}">{{ post.author }}</a>
+            </div>
+            {% if post.like %}
+                <div class="card-text">
+                    {{ post.likes }}
+                </div>
+            {% endif %}
+        </div>
+        {% endfor%}
+        {% include "network/pagination.html" with page=posts %}
+    </div>
+    
+</div>
+
+{% endblock %}

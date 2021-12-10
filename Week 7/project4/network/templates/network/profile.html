@@ -41,9 +41,9 @@
 
     {% if not_same_user %}
         {% if currently_follow %}
-            <button type="button" class="btn btn-primary">Unfollow</button>
+            <button type="button" class="btn btn-primary" id="followUnfollowButton", data-profile="{{profile.id}}">Unfollow</button>
         {% else %}
-            <button type="button" class="btn btn-primary">Follow</button>
+            <button type="button" class="btn btn-primary" id="followUnfollowButton", data-profile="{{profile.id}}">Follow</button>
         {% endif %}
     {% endif %}
 </div>

@@ -1,11 +1,15 @@
 from django.contrib.auth import authenticate, login, logout
 from django.db import IntegrityError
 from django.http import HttpResponseRedirect
+from django.http.response import JsonResponse
 from django.shortcuts import render
 from django.urls import reverse
 from django.core.paginator import Paginator
 from django.contrib.auth.decorators import login_required
 
+import json
+
+from django.views.decorators import csrf
 from .models import Post, User
 from .forms import PostForm
 
@@ -48,7 +52,8 @@ def profile(request, user_id):
         "posts": posts,
         "page": page,
         "not_same_user": not_same_user,
-        "currently_follow": currently_follow
+        "currently_follow": currently_follow,
+        "profile": user
     })
 
 @login_required
@@ -58,6 +63,20 @@ def following(request):
         "posts": posts
     })
     
+@csrf.csrf_exempt
+@login_required
+def follow(request):
+    if request.method == "POST":
+        profileId = json.loads(request.body).get("profileId")
+        profile = User.objects.get(id=profileId)
+        if request.user.does_follow(profile):
+            request.user.unfollow(profile)
+            return JsonResponse({f"message": f"Successfully unfollowed {profile}",}, status=201)
+        else:
+            request.user.follow_user(profile)
+            return JsonResponse({"message": f"Successfully followed {profile}"}, status = 201)
+    else:
+        return JsonResponse({"Error": "Must be a POST request"})
 
 def login_view(request):
     if request.method == "POST":

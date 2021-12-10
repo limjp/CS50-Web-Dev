@@ -61,3 +61,12 @@ class NetworkTestCases(TestCase):
         
         self.assertTrue(user1_follows_user2)
         self.assertFalse(user1_follows_user3)
+    
+    def test_unfollow(self):
+        user1 = User.objects.get(username="Test1")
+        user2 = User.objects.get(username="Test2")
+        user1.follow_user(user2)
+        user1.unfollow(user2)
+        user1_follows_user2 = user1.does_follow(user2)
+
+        self.assertFalse(user1_follows_user2)
