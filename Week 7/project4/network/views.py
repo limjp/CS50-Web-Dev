@@ -1,13 +1,13 @@
 from django.contrib.auth import authenticate, login, logout
 from django.db import IntegrityError
-from django.http import HttpResponse, HttpResponseRedirect
+from django.http import HttpResponseRedirect
 from django.shortcuts import render
 from django.urls import reverse
-from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
+from django.core.paginator import Paginator
+from django.contrib.auth.decorators import login_required
 
 from .models import Post, User
 from .forms import PostForm
-
 
 def index(request):
     all_posts = Post.objects.all().order_by("-date_created")
@@ -31,10 +31,11 @@ def index(request):
         "page": page
     })
 
+@login_required
 def profile(request, user_id):
     user = User.objects.get(pk=user_id)
     follower_count = user.followers.count()
-    follow_count = user.follow.count()
+    follow_count = user.following.count()
     all_posts = Post.objects.filter(author = user).all().order_by("-date_created")
     paginator = Paginator(all_posts, 10)
     page = request.GET.get("page")
@@ -50,6 +51,13 @@ def profile(request, user_id):
         "currently_follow": currently_follow
     })
 
+@login_required
+def following(request):
+    posts = Post.objects.filter(author__following__follower = request.user)
+    return render(request, "network/following.html", {
+        "posts": posts
+    })
+    
 
 def login_view(request):
     if request.method == "POST":

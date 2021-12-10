@@ -33,6 +33,14 @@ class NetworkTestCases(TestCase):
         self.assertEqual(response.status_code, 200)
         self.assertEqual(len(response.context["posts"]), 1)
     
+    def test_following(self):
+        user1 = User.objects.get(username="Test1")
+        user2 = User.objects.get(username="Test2")
+        user1.follow_user(user2)
+        response = self.client.get(reverse("following"))
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(len(response.context["posts"]), 2)
+    
     def test_does_like(self):
         user1 = User.objects.get(username="Test1")
         post1 = Post.objects.get(content="This is 1st test post")

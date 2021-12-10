@@ -4,21 +4,21 @@ from django.db.models.deletion import CASCADE
 
 
 class User(AbstractUser):
-    following = models.ManyToManyField("self", through="Following", symmetrical=False)
+    relationship = models.ManyToManyField("self", through="Following", symmetrical=False)
     date_created = models.DateTimeField(auto_now_add=True)
 
     def follow_user(self, user):
         Following.objects.create(
-            follower_id = self,
-            followered_id = user
+            follower = self,
+            following = user
         )
         return
 
     def does_follow(self, user):
         try:
             Following.objects.get(
-                follower_id = self,
-                followered_id = user
+                follower = self,
+                following = user
             )
             return True
         except:
@@ -26,8 +26,8 @@ class User(AbstractUser):
     
     def unfollow(self, user):
         Following.objects.filter(
-            follower_id = self,
-            followered_id = user
+            follower = self,
+            following = user
         ).delete()
         return
 
@@ -65,12 +65,16 @@ class User(AbstractUser):
         return f"{self.username}"
 
 class Following(models.Model):
-    follower_id = models.ForeignKey(User, related_name="followers", on_delete=CASCADE)
-    followered_id = models.ForeignKey(User, related_name="follow", on_delete=CASCADE)
+    follower = models.ForeignKey(User, related_name="followers", on_delete=CASCADE)
+    following = models.ForeignKey(User, related_name="following", on_delete=CASCADE)
     date_created = models.DateTimeField(auto_now_add=True)
 
+
+    class Meta:
+        unique_together = (('following', 'follower'))
+
     def __str__(self) -> str:
-        return f"Follower: {self.follower_id}, Following: {self.followered_id}"
+        return f"Follower: {self.follower}, Following: {self.following}"
 
 class Post(models.Model):
     author = models.ForeignKey(User, related_name="posts", on_delete=CASCADE)
