@@ -9,7 +9,7 @@ from django.contrib.auth.decorators import login_required
 
 import json
 
-from django.views.decorators import csrf
+from django.views.decorators.csrf import csrf_exempt
 from .models import Post, User
 from .forms import PostForm
 
@@ -63,7 +63,7 @@ def following(request):
         "posts": posts
     })
     
-@csrf.csrf_exempt
+@csrf_exempt
 @login_required
 def follow(request):
     if request.method == "POST":
