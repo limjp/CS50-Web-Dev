@@ -97,6 +97,21 @@ def follow(request):
     else:
         return JsonResponse({"Error": "Must be a POST request"})
 
+@csrf_exempt
+@login_required
+def like(request):
+    if request.method == "POST":
+        postId = json.loads(request.body).get("postId")
+        post = Post.objects.get(id = postId)
+        if request.user.does_like(post):
+            request.user.unlike_post(post)
+            return JsonResponse({f"message": f"Successfully unlike post",}, status=201)            
+        else:
+            request.user.like_post(post)
+            return JsonResponse({f"message": f"Successfully like post",}, status=201)
+    else:
+        return JsonResponse({"Error": "Must be a POST request"})
+
 def login_view(request):
     if request.method == "POST":
 

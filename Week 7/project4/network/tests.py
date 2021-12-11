@@ -49,6 +49,14 @@ class NetworkTestCases(TestCase):
         response = self.client.post(path=reverse("follow"), data=bodyData, content_type="json")
         self.assertEqual(response.status_code, 201)
         self.assertTrue(user1.does_follow(user2))
+    
+    def test_like(self):
+        user1 = User.objects.get(username="Test1")        
+        post1 = Post.objects.get(content="This is 1st test post")
+        bodyData = json.dumps({"postId": post1.id})
+        response = self.client.post(path=reverse("like"), data=bodyData, content_type="json")
+        self.assertEqual(response.status_code, 201)
+        self.assertTrue(user1.does_like(post1))
 
     def test_does_like(self):
         user1 = User.objects.get(username="Test1")

@@ -12,5 +12,6 @@ urlpatterns = [
     path("following", views.following, name="following"),
 
     #API Routes
-    path("follow", views.follow, name="follow")
+    path("follow", views.follow, name="follow"),
+    path("like", views.like, name="like")
 ]
