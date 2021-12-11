@@ -1,4 +1,5 @@
 from django.contrib.auth import authenticate, login, logout
+from django.core import paginator
 from django.db import IntegrityError
 from django.http import HttpResponseRedirect
 from django.http.response import JsonResponse
@@ -18,6 +19,11 @@ def index(request):
     paginator = Paginator(all_posts, 10)
     page = request.GET.get("page")
     posts = paginator.get_page(page)
+
+    postLikes = {}
+    for post in posts:
+        postLikes[post] = request.user.does_like(post)
+
     if request.method == "POST":
         form = PostForm(request.POST)
         if form.is_valid():
@@ -26,12 +32,12 @@ def index(request):
         else:
             return render(request, "network/index.html", {
                 "form": form,
-                "posts": posts,
+                "posts": postLikes,
                 "page": page
             })
     return render(request, "network/index.html", {
         "post_form": PostForm(),
-        "posts": posts,
+        "postLikes": postLikes,
         "page": page
     })
 
@@ -44,12 +50,17 @@ def profile(request, user_id):
     paginator = Paginator(all_posts, 10)
     page = request.GET.get("page")
     posts = paginator.get_page(page)
+
+    postLikes = {}
+    for post in posts:
+        postLikes[post] = request.user.does_like(post)
+    
     not_same_user = user != request.user
     currently_follow = request.user.does_follow(user)
     return render(request, "network/profile.html", {
         "follower_count": follower_count,
         "follow_count": follow_count,
-        "posts": posts,
+        "postLikes": postLikes,
         "page": page,
         "not_same_user": not_same_user,
         "currently_follow": currently_follow,
@@ -58,9 +69,17 @@ def profile(request, user_id):
 
 @login_required
 def following(request):
-    posts = Post.objects.filter(author__following__follower = request.user)
+    all_posts = Post.objects.filter(author__following__follower = request.user).order_by("-date_created")
+    paginator = Paginator(all_posts, 10)
+    page = request.GET.get("page")
+    posts = paginator.get_page(page)
+
+    postLikes = {}
+    for post in posts:
+        postLikes[post] = request.user.does_like(post)
+    
     return render(request, "network/following.html", {
-        "posts": posts
+        "postLikes": postLikes
     })
     
 @csrf_exempt

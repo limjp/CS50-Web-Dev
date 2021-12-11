@@ -1,7 +1,8 @@
+from django.http import response
 from django.test import TestCase, Client
-from .models import User, Post, Following
+from .models import User, Post
 from django.urls import reverse
-import traceback
+import json
 # Create your tests here.
 
 class NetworkTestCases(TestCase):
@@ -18,20 +19,20 @@ class NetworkTestCases(TestCase):
     
     def test_index_get(self):
         response = self.client.get(reverse("index"))
-        self.assertEqual(len(response.context["posts"]), 3)
+        self.assertEqual(len(response.context["postLikes"]), 3)
         self.assertEqual(response.status_code, 200)
 
     def test_index_post_form(self):
         response = self.client.post(reverse("index"), {"content": "A test post"})
         new_get_response = self.client.get(reverse("index"))
         self.assertEqual(response.status_code, 302)
-        self.assertEqual(len(new_get_response.context["posts"]), 4)
+        self.assertEqual(len(new_get_response.context["postLikes"]), 4)
     
     def test_profile(self):
         user = User.objects.get(username="Test1")
         response = self.client.get(f"/profile/{user.id}")
         self.assertEqual(response.status_code, 200)
-        self.assertEqual(len(response.context["posts"]), 1)
+        self.assertEqual(len(response.context["postLikes"]), 1)
     
     def test_following(self):
         user1 = User.objects.get(username="Test1")
@@ -39,8 +40,16 @@ class NetworkTestCases(TestCase):
         user1.follow_user(user2)
         response = self.client.get(reverse("following"))
         self.assertEqual(response.status_code, 200)
-        self.assertEqual(len(response.context["posts"]), 2)
+        self.assertEqual(len(response.context["postLikes"]), 2)
     
+    def test_follow(self):
+        user1 = User.objects.get(username="Test1")
+        user2 = User.objects.get(username="Test2")
+        bodyData = json.dumps({"profileId": user2.id})
+        response = self.client.post(path=reverse("follow"), data=bodyData, content_type="json")
+        self.assertEqual(response.status_code, 201)
+        self.assertTrue(user1.does_follow(user2))
+
     def test_does_like(self):
         user1 = User.objects.get(username="Test1")
         post1 = Post.objects.get(content="This is 1st test post")

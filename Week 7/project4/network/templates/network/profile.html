@@ -16,7 +16,7 @@
     </div>
     
     <div class="user_post_container">
-        {% for post in posts %}
+        {% for post, likeStatus in postLikes.items %}
         <div class="card">
             <div class="card-body">
                 {{ post.content }}
@@ -29,6 +29,11 @@
             <div class="card-link">
                 {{ post.author }}
             </div>
+            {% if likeStatus%}
+                <button type="button" class="btn btn-primary" id="likeButton">Unlike</button>
+            {% else %}
+                <button type="button" class="btn btn-primary" id="likeButton">Like</button>            
+            {% endif %}
             {% if post.like %}
                 <div class="card-text">
                     {{ post.likes }}
