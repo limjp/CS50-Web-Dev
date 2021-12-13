@@ -38,7 +38,8 @@ def index(request):
     return render(request, "network/index.html", {
         "post_form": PostForm(),
         "postLikes": postLikes,
-        "page": page
+        "page": page,
+        "posts": posts
     })
 
 @login_required
