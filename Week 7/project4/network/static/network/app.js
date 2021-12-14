@@ -1,5 +1,12 @@
 document.addEventListener("DOMContentLoaded", function() {
-    document.querySelector("#followUnfollowButton").addEventListener("click", () => follow())
+    if (document.querySelector("#followUnfollowButton")){
+        document.querySelector("#followUnfollowButton").addEventListener("click", () => follow())
+    }
+    document.querySelectorAll(".likeButton").forEach(button => {
+        button.onclick = function () {
+            like(this.dataset.postid, this)
+        }
+    })
 })
 
 function follow() {
@@ -18,6 +25,23 @@ function follow() {
         } else {
             currentlyFollowing = document.querySelector("#followUnfollowButton").innerHTML
             currentlyFollowing === "Unfollow" ? document.querySelector("#followUnfollowButton").innerHTML = "Follow" : document.querySelector("#followUnfollowButton").innerHTML = "Unfollow"
+        }
+    })
+}
+
+function like(postId, btn) {
+    fetch('/like', {
+        method: "POST",
+        body: JSON.stringify({
+            postId: postId
+        })
+    })
+    .then((response) => response.json())
+    .then(result => {
+        if(result.error) {
+            create_error_alert(result.error)
+        } else {
+            btn.innerHTML === "Unlike" ? btn.innerHTML = "Like" : btn.innerHTML = "Unlike"
         }
     })
 }

@@ -10,9 +10,9 @@
       {% endif %}
 
       {% if likeStatus%}
-        <button type="button" class="btn btn-primary" id="likeButton">Unlike</button>
+        <button type="button" class="btn btn-primary likeButton" data-postId="{{post.id}}">Unlike</button>
       {% else %}
-          <button type="button" class="btn btn-primary" id="likeButton">Like</button>            
+          <button type="button" class="btn btn-primary likeButton" data-postId="{{post.id}}">Like</button>            
       {% endif %}
     </div>
   </div>

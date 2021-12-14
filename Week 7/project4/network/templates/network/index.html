@@ -20,28 +20,9 @@
         {{ post_form|crispy }}
         <button type="submit" class="btn btn-success">Post</button>
     </form>
-    
+
     <div class="container">
-        {% for post, likeStatus in postLikes.items %}
-        <div class="card">
-            <div class="card-body">
-              <p class="card-text"> {{ post.content }} </p>
-              <p class="card-text"> {{ post.date_created }} </p>
-              <a class="nav-link" href="{% url 'profile' post.author.id %}"> {{ post.author }}</a>
-                
-              {% if post.like %}
-                <p class="card-text"> {{ post.likes }} </p>
-              {% endif %}
-        
-              {% if likeStatus%}
-                <button type="button" class="btn btn-primary" id="likeButton">Unlike</button>
-              {% else %}
-                  <button type="button" class="btn btn-primary" id="likeButton">Like</button>            
-              {% endif %}
-            </div>
-          </div>
-        {% endfor %}
-        {% include "network/pagination.html" with page=posts %}
+      {% include "network/post_feed.html" %}
     </div>
     
 </div>

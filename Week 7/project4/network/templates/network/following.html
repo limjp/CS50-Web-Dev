@@ -5,31 +5,8 @@
 
 <div class="container">
     
-    <div class="user_post_container">
-        {% for post, likeStatus in postLikes.items %}
-        <div class="card">
-            <div class="card-body">
-                {{ post.content }}
-            </div>
-            <div class="card-text">
-                {{ post.date_created }}
-            </div>
-            <div class="card-link">
-                <a class="nav-link" href="{% url 'profile' post.author.id %}">{{ post.author }}</a>
-            </div>
-            {% if likeStatus%}
-            <button type="button" class="btn btn-primary" id="likeButton">Unlike</button>
-            {% else %}
-                <button type="button" class="btn btn-primary" id="likeButton">Like</button>            
-            {% endif %}
-            {% if post.like %}
-                <div class="card-text">
-                    {{ post.likes }}
-                </div>
-            {% endif %}
-        </div>
-        {% endfor%}
-        {% include "network/pagination.html" with page=posts %}
+    <div class="container">
+        {% include "network/post_feed.html" %}
     </div>
     
 </div>

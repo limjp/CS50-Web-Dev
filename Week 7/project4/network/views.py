@@ -101,6 +101,7 @@ def follow(request):
 @csrf_exempt
 @login_required
 def like(request):
+    print("JP I am in like")
     if request.method == "POST":
         postId = json.loads(request.body).get("postId")
         post = Post.objects.get(id = postId)
