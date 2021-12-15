@@ -101,7 +101,6 @@ def follow(request):
 @csrf_exempt
 @login_required
 def like(request):
-    print("JP I am in like")
     if request.method == "POST":
         postId = json.loads(request.body).get("postId")
         post = Post.objects.get(id = postId)
@@ -113,6 +112,22 @@ def like(request):
             return JsonResponse({f"message": f"Successfully like post",}, status=201)
     else:
         return JsonResponse({"Error": "Must be a POST request"})
+
+@csrf_exempt
+@login_required
+def save(request):
+    if request.method != "PUT":
+        return JsonResponse({"Error": "Must be a PUT request"})
+    else:
+        postId = json.loads(request.body).get("postId")
+        newContent = json.loads(request.body).get("content")
+        try:
+            post = Post.objects.get(id = postId)
+        except:
+            return JsonResponse({"Error": "No such post found"}, status=404)
+        post.content = newContent
+        post.save()
+        return JsonResponse({"message": "Post successfully updated"}, status=200)
 
 def login_view(request):
     if request.method == "POST":

@@ -1,19 +1,26 @@
 {% for post, likeStatus in postLikes.items %}
 <div class="card">
     <div class="card-body">
-      <p class="card-text"> {{ post.content }} </p>
+      <p class="card-text" id="{{post.id}}"> {{ post.content }} </p>
       <p class="card-text"> {{ post.date_created }} </p>
       <a class="nav-link" href="{% url 'profile' post.author.id %}"> {{ post.author }}</a>
-        
-      {% if post.like %}
-        <p class="card-text"> {{ post.likes }} </p>
-      {% endif %}
+      <p class="card-text"> {{ post.likes.count }} </p>
 
-      {% if likeStatus%}
-        <button type="button" class="btn btn-primary likeButton" data-postId="{{post.id}}">Unlike</button>
-      {% else %}
+      <div class="row">
+        <div class="rowBtn">
+          {% if likeStatus%}
+          <button type="button" class="btn btn-primary likeButton" data-postId="{{post.id}}">Unlike</button>
+          {% else %}
           <button type="button" class="btn btn-primary likeButton" data-postId="{{post.id}}">Like</button>            
-      {% endif %}
+          {% endif %}
+        </div>
+      
+        <div class="rowBtn">
+          <button type="button" class="btn btn-primary editButton" data-postId="{{post.id}}">Edit</button>  
+        </div>
+
+      </div>
+
     </div>
   </div>
 {% endfor %}

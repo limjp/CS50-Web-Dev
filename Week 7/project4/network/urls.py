@@ -1,4 +1,5 @@
 
+from typing import ValuesView
 from django.urls import path
 
 from . import views
@@ -13,5 +14,6 @@ urlpatterns = [
 
     #API Routes
     path("follow", views.follow, name="follow"),
-    path("like", views.like, name="like")
+    path("like", views.like, name="like"),
+    path("save", views.save, name="save")
 ]

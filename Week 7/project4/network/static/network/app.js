@@ -7,6 +7,11 @@ document.addEventListener("DOMContentLoaded", function() {
             like(this.dataset.postid, this)
         }
     })
+    document.querySelectorAll(".editButton").forEach(button => {
+        button.onclick = function () {
+            edit(this.dataset.postid, this)
+        }
+    })
 })
 
 function follow() {
@@ -52,4 +57,35 @@ function create_error_alert(alert_msg) {
     element.setAttribute("role", "alert")
     element.setAttribute("class", "alert alert-danger")
     document.querySelector(".container").append(element)
+}
+
+function edit(postId, btn) {
+    document.getElementById(postId).setAttribute("contenteditable", true)
+    btn.innerHTML = "Save"
+    btn.removeEventListener("click", edit)
+    btn.addEventListener("click", () => save(postId, btn))
+
+}
+
+function save(postId, btn) {
+    const post = document.getElementById(postId)
+    post.setAttribute("contenteditable", false)
+    btn.innerHTML = "Edit"
+
+    fetch(`/save`, {
+        method: "PUT",
+        body: JSON.stringify({
+            postId: postId,
+            content: post.innerHTML
+        })
+    })
+    .then((response => response.json))
+    .then(result => {
+        if (result.error) {
+            create_error_alert(result.error)
+        }
+    })
+
+    btn.removeEventListener("click", save)
+    btn.addEventListener("click", () => edit(postId, btn))
 }
